@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carlos-appb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carlos-appb
+  template:
+    metadata:
+      labels:
+        app: carlos-appb
+    spec:
+      containers:
+        - name: carlos-appb
+          image: danurky/appb:v1.0.0
+          ports:
+            - containerPort: 5001

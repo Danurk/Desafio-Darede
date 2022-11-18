@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  labels:
+    app: appa
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+spec:
+  rules:
+    - host: carlosnascimento.tk
+      http:
+        paths:
+          - path: /appa
+            pathType: Prefix
+            backend:
+              service:
+                name: appa-service
+                port:
+                  number: 32113
+          - path: /appb
+            pathType: Prefix
+            backend:
+              service:
+                name: appb-service
+                port:
+                  number: 32739

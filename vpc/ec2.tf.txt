@@ -1,0 +1,49 @@
+resource "aws_instance" "nginx-instance" {
+  ami                    = "ami-08c40ec9ead489470"
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.public2[0].id
+  vpc_security_group_ids = ["${aws_security_group.default-sg.id}"]
+
+  depends_on = [
+    aws_vpc.carlos2,
+    aws_subnet.public2,
+    aws_security_group.default-sg
+  ]
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("C:/Users/carlo/Documents/Chaves/suco.txt")
+    host        = aws_instance.nginx-instance.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install nginx -y",
+      "sudo systemctl start nginx.service",
+      "sudo systemctl enable nginx.service",
+      "sudo systemctl restart nginx.service",
+      "sudo apt update",
+      "sudo mkdir -p /etc/apt/keyrings",
+      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
+      "echo \\ 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \\ $(lsb_release -cs) stable' | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+      "sudo apt-get update",
+      "sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin",
+    ]
+  }
+
+  key_name = "access-key"
+
+  tags = var.instance_tags
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+}
+
+resource "aws_key_pair" "key-ec2" {
+  key_name   = "access-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChXZ7Aqeafexv2Rc5BVI+mPKX513xay89ArzXUbcNaLdVmLH+we8h8Wo9nI2ZFTLEsV0QDes/tD2v0+deUyx7v2Y1HvZn8smo1E/PU4H4Ar9wnYWlT7lqiwptbE/Z3ufChKGp+Fctj2WlGcNi37is80+aJp5/ntzk2MVRc0EGdbiAFUUpjM2LpFlmw1PMPxdSXIGMkRa+jfMnxtbS5+W+FwxIeJsIj1EliF4oqIIlyQGNXPLR1SNpNZ9CMz7GjDipE72eLO0DPWmqDK7xbuTXVOzZ9Yq2qR5CY3OnxcalwAmGZXDYpfMBItCLZVTV5C3YmRz9Tvi4MvQfPp2UhyD0x rsa-key-20221114"
+}
+

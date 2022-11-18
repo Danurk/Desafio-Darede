@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carlos-appa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carlos-appa
+  template:
+    metadata:
+      labels:
+        app: carlos-appa
+    spec:
+      containers:
+        - name: carlos-appa
+          image: danurky/appa:v1.0.0
+          ports:
+            - containerPort: 5000

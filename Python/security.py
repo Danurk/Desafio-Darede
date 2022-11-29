@@ -3,7 +3,7 @@ import boto3
 ec2 = boto3.client('ec2')
 client = boto3.client('sns')
 
-response = ec2.describe_security_groups(GroupIds=['sg-0700087e899a5ce74'])
+response = ec2.describe_security_groups(GroupIds=['sg-024ab87aa99afcdb0','sg-0b09d936f000fade2','vpc-03ff4222593a1c0a0','sg-033d9666a2f4598bb'])
 
 for i in response['SecurityGroups']:
     print("The Ingress rules are as follows: ")

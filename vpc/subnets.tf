@@ -6,7 +6,9 @@ resource "aws_subnet" "public" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = true
   tags = {
-    Name = "public-subnet"
+    Name                                 = "public-subnet"
+    "kubernetes.io/role/elb"             = "1"
+    "kubernetes.io/cluster/carlos-cluster" = "owned"
   }
 }
 

@@ -1,27 +1,30 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: app-ingress2
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
-    alb.ingress.kubernetes.io/subnets: subnet-0cfdd4c4b5e1c907f, subnet-0c7bcadc551287a2a
 spec:
   rules:
-    - http:
+    - host: appc.carlosnascimento.tk
+      http:
         paths:
-          - path: /appa.html
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: appa-service-nodeport
+                name: appc-service
                 port:
                   number: 80
-          - path: /appb.html
+    - host: appd.carlosnascimento.tk
+      http:
+        paths:
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: appb-service-nodeport
+                name: appd-service
                 port:
                   number: 80

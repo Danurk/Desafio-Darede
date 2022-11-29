@@ -1,24 +1,26 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: carlos-teste
+  name: carlos-cluster
   region: us-east-1
   version: "1.23"
 vpc:
-  id: "vpc-03bba3dd9daf3cfe5"
+  id: "vpc-03ff4222593a1c0a0"
   subnets:
     public:
-      private-one:
-        id: "subnet-0d05a7949d013fc45"
-      private-two:
-        id:  "subnet-0cffdb24d2020bfd0"
+      public-one:
+        id: "subnet-0cfdd4c4b5e1c907f"
+      public-two:
+        id: "subnet-0c7bcadc551287a2a"
 managedNodeGroups:
 - name: carlos-nodegroup
-  instanceType: t2.small
-  minSize: 2
+  securityGroups:
+    attachIDs: ["sg-024ab87aa99afcdb0"]
+  instanceType: t3.medium
+  minSize: 1
   maxSize: 4
   spot: true
-  privateNetworking: true
+  privateNetworking: false
   subnets:
-    - private-one
-    - private-two
+    - public-one
+    - public-two

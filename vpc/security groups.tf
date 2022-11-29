@@ -40,7 +40,7 @@ resource "aws_security_group" "default-sg" {
   }
 
   tags = {
-    Name = "suco"
+    Name = "Jenkins"
   }
 }
 
